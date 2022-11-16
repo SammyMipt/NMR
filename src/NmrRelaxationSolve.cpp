@@ -184,544 +184,186 @@ void NmrRelaxationSolve::ReadStart()
 	{
 		cout << "Caught exception number:  " << a << " No file Nmr_data.dat" << endl;
 	}
-	std::vector<std::pair<std::string, std::string > > keys;
-	std::string tmp1, tmp2;
-	for(int i = 0; i < 61; ++i)
-	{
-		std::getline(f, tmp1, '	');
-		std::getline(f, tmp2, '\n');
-		keys.push_back(make_pair(tmp1, tmp2));
-	}
+	f >> key;
+	getline(f, field_comment);
+	cout << endl << "key = " << key<<endl;
+	f >> iPrint;
+	getline(f, field_comment);
+	cout << "iPrint = " << iPrint << endl;
+	f >> jPrint;
+	getline(f, field_comment);
+	cout << "jPrint = " << jPrint << endl;
+	f >> kPrint;
+	getline(f, field_comment);
+	cout << "kPrint = " << kPrint << endl;
+	f >> ndPrint;
+	getline(f, field_comment);
+	cout << "ndPrint = " << ndPrint << endl;
+	f >> ndWrite;
+	getline(f, field_comment);
+	cout << "ndWrite = " << ndWrite << endl;
+	f >> ndVid;
+	getline(f, field_comment);
+	cout << "ndVid = " << ndVid << endl;
+	f >> ndAmpl;
+	getline(f, field_comment);
+	cout << "ndAmpl = " << ndAmpl << endl;
+	f >> nPoro;
+	getline(f, field_comment);
+	cout << "nPoro = " << nPoro << endl;
+	f >> nComponents;
+	getline(f, field_comment);
+	cout << "nComponents = " << nComponents << endl;
+	f >> nFluid;
+	getline(f, field_comment);
+	cout << "nFluid = " << nFluid << endl;
+	f >> nSurfRelWater;
+	getline(f, field_comment);
+	cout << "nSurfRelWater = " << nSurfRelWater << endl;
+	f >> nSurfRelOil;
+	getline(f, field_comment);
+	cout << "nSurfRelOil = " << nSurfRelOil << endl;
+	f >> nVectorMult;
+	getline(f, field_comment);
+	cout << "nVectorMult = " << nVectorMult << endl;
+	f >> nVelocity;
+	getline(f, field_comment);
+	cout << "nVelocity = " << nVelocity << endl;
+	f >> nDiffusion;
+	getline(f, field_comment);
+	cout << "nDiffusion = " << nDiffusion << endl;
+	f >> nDirectionField;
+	getline(f, field_comment);
+	cout << "nDirectionField = " << nDirectionField << endl;
+	f >> nSequence;
+	getline(f, field_comment);
+	cout << "nSequence = " << nSequence << endl;
+	f >> nBoundary1;
+	cout << "nBoundary1 = " << nBoundary1 << endl;
+	f >> nBoundary3;
+	cout << "nBoundary3 = " << nBoundary3 << endl;
+	getline(f, field_comment);
+	f >> nBoundary2;
+	cout << "nBoundary2 = " << nBoundary2 << endl;
+	f >> nBoundary4;
+	cout << "nBoundary4 = " << nBoundary4 << endl;
+	getline(f, field_comment);	
+	f >> nBoundary5;
+	cout << "nBoundary5 = " << nBoundary5 << endl;
+	f >> nBoundary6;
+	cout << "nBoundary6 = " << nBoundary6 << endl;
+	getline(f, field_comment);
+	f >> dx;
+	getline(f, field_comment);
+	cout << "dx = " << dx << endl;
+	f >> dy;
+	getline(f, field_comment);
+	cout << "dy = " << dy << endl;
+	f >> dz;
+	getline(f, field_comment);
+	cout << "dz = " << dz << endl;
+	f >> bsx;
+	getline(f, field_comment);
+	cout << "bsx = " << bsx << endl;
+	f >> bsy;
+	getline(f, field_comment);
+	cout << "bsy = " << bsy << endl;
+	f >> bsz;
+	getline(f, field_comment);
+	cout << "bsz = " << bsz << endl;
+	//additional field
+	getline(f, field_comment);
+	//additional field
+	getline(f, field_comment);
+	//noise amplitude
+	getline(f, field_comment);
+	f >> sequenceTime1;
+	getline(f, field_comment);
+	cout << "sequenceTime1 = " << sequenceTime1 << endl;
+	f >> sequenceTime2;
+	getline(f, field_comment);
+	cout << "sequenceTime2 = " << sequenceTime2 << endl;
+	//constant gradient x
+	f >> constGradX;
+	getline(f, field_comment);
+	cout << "constGradX = " << constGradX << endl;
+	//constant gradient y
+	f >> constGradY;
+	getline(f, field_comment);
+	cout << "constGradY = " << constGradY << endl;
+	//constant gradient z
+	f >> constGradZ;
+	getline(f, field_comment);
+	cout << "constGradZ = " << constGradZ << endl;
+	//noise amplitude
+	f >> noiseAmpl;
+	getline(f, field_comment);
+	cout << "noiseAmpl = " << noiseAmpl << endl;
+	f >> velocityMultiplicator;
+	getline(f, field_comment);
+	cout << "velocityMultiplicator = " << velocityMultiplicator << endl;
+	f >> dOil;
+	getline(f, field_comment);
+	cout << "dOil = " << dOil << endl;
+	f >> dWater;
+	getline(f, field_comment);
+	cout << "dWater = " << dWater << endl;
+	f >> r1Oil;
+	getline(f, field_comment);
+	cout << "r1Oil = " << r1Oil << endl;
+	f >> r1Water;
+	getline(f, field_comment);
+	cout << "r1Water = " << r1Water << endl;
+	f >> r2Oil;
+	getline(f, field_comment);
+	cout << "r2Oil = " << r2Oil << endl;
+	f >> r2Water;
+	getline(f, field_comment);
+	cout << "r2Water = " << r2Water << endl;
+	f >> t1Oil;
+	getline(f, field_comment);
+	cout << "t1Oil = " << t1Oil << endl;
+	f >> t1Water;
+	getline(f, field_comment);
+	cout << "t1Water = " << t1Water << endl;
+	f >> t2Oil;
+	getline(f, field_comment);
+	cout << "t2Oil = " << t2Oil << endl;
+	f >> t2Water;
+	getline(f, field_comment);
+	cout << "t2Water = " << t2Water << endl;
+	f >> temperature;
+	getline(f, field_comment);
+	cout << "temperature = " << temperature << endl;
+	f >> an1;
+	cout << "an1 = " << an1 << endl;
+	f >> an2;
+	getline(f, field_comment);
+	cout << "an2 = " << an2 << endl;
+	f >> bn1;
+	cout << "bn1 = " << bn1 << endl;
+	f >> bn2;
+	getline(f, field_comment);
+	cout << "bn2 = " << bn2 << endl;
+	f >> cfl;
+	getline(f, field_comment);
+	cout << "cfl = " << cfl << endl;
+	f >> cfl1;
+	getline(f, field_comment);
+	cout << "cfl1 = " << cfl1 << endl;
+	f >> step0;
+	getline(f, field_comment);
+	cout << "step0 = " << step0 << endl;
+	f >> bufferSizeX;
+	getline(f, field_comment);
+	cout << "bufferSizeX = " << bufferSizeX << endl;
+	f >> bufferSizeY;
+	getline(f, field_comment);
+	cout << "bufferSizeY = " << bufferSizeY << endl;
+	f >> bufferSizeZ;
+	getline(f, field_comment);
+	cout << "bufferSizeZ = " << bufferSizeZ << endl;
 	f.close();
-
-	for(auto it : keys)
-	{
-		std::cout << it.first << "\t" << it.second << std::endl;
-	}
-
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("KEY");
-    	if (pos != std::string::npos)
-    	{
-        	key = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("IPRINT");
-    	if (pos != std::string::npos)
-    	{
-        	iPrint = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("JPRINT");
-    	if (pos != std::string::npos)
-    	{
-        	jPrint = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("KPRINT");
-    	if (pos != std::string::npos)
-    	{
-        	kPrint = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("Printing on");
-    	if (pos != std::string::npos)
-    	{
-        	ndPrint = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NDWRIT");
-    	if (pos != std::string::npos)
-    	{
-        	ndWrite = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NDVID");
-    	if (pos != std::string::npos)
-    	{
-        	ndVid = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NDAMPL");
-    	if (pos != std::string::npos)
-    	{
-        	ndAmpl = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NPOR");
-    	if (pos != std::string::npos)
-    	{
-        	nPoro = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NCOMP");
-    	if (pos != std::string::npos)
-    	{
-        	nComponents = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NFLUID");
-    	if (pos != std::string::npos)
-    	{
-        	nFluid = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("nSurfRelWater");
-    	if (pos != std::string::npos)
-    	{
-        	nSurfRelWater = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("nSurfRelOil");
-    	if (pos != std::string::npos)
-    	{
-        	nSurfRelOil = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NVECTOR");
-    	if (pos != std::string::npos)
-    	{
-        	nVectorMult = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NVELOC");
-    	if (pos != std::string::npos)
-    	{
-        	nVelocity = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NDIFFUS");
-    	if (pos != std::string::npos)
-    	{
-        	nDiffusion = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NDIRECT_FIELD");
-    	if (pos != std::string::npos)
-    	{
-        	nDirectionField = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NSEQUENCE");
-    	if (pos != std::string::npos)
-    	{
-        	nSequence = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB1");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary1 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB2");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary2 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB3");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary3 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB4");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary4 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB5");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary5 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("NB6");
-    	if (pos != std::string::npos)
-    	{
-        	nBoundary6 = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("DX");
-    	if (pos != std::string::npos)
-    	{
-        	dx = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("DY");
-    	if (pos != std::string::npos)
-    	{
-        	dy = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("DZ");
-    	if (pos != std::string::npos)
-    	{
-        	dz = atof(it.first.c_str());
-        	break;
-    	}
-	}
-
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("BX0");
-    	if (pos != std::string::npos)
-    	{
-        	bsx = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("BY0");
-    	if (pos != std::string::npos)
-    	{
-        	bsy = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("BZ0");
-    	if (pos != std::string::npos)
-    	{
-        	bsz = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("TIME1");
-    	if (pos != std::string::npos)
-    	{
-        	sequenceTime1 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("TIME2");
-    	if (pos != std::string::npos)
-    	{
-        	sequenceTime2 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("GRAD_X");
-    	if (pos != std::string::npos)
-    	{
-        	constGradX = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("GRAD_Y");
-    	if (pos != std::string::npos)
-    	{
-        	constGradY = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("GRAD_Z");
-    	if (pos != std::string::npos)
-    	{
-        	constGradZ = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("AMPL_NOISE");
-    	if (pos != std::string::npos)
-    	{
-        	noiseAmpl = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("VEL_MULT");
-    	if (pos != std::string::npos)
-    	{
-        	velocityMultiplicator = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("D_OIL");
-    	if (pos != std::string::npos)
-    	{
-        	dOil = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("D_WAT");
-    	if (pos != std::string::npos)
-    	{
-        	dWater = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("R1_OIL");
-    	if (pos != std::string::npos)
-    	{
-        	r1Oil = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("R1_WAT");
-    	if (pos != std::string::npos)
-    	{
-        	r1Water = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("R2_OIL");
-    	if (pos != std::string::npos)
-    	{
-        	r2Oil = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("R2_WAT");
-    	if (pos != std::string::npos)
-    	{
-        	r2Water = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("T1_OIL");
-    	if (pos != std::string::npos)
-    	{
-        	t1Oil = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("T1_WAT");
-    	if (pos != std::string::npos)
-    	{
-        	t1Water = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("T2_OIL");
-    	if (pos != std::string::npos)
-    	{
-        	t2Oil = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("T2_WAT");
-    	if (pos != std::string::npos)
-    	{
-        	t2Water = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("T0");
-    	if (pos != std::string::npos)
-    	{
-        	temperature = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("AN(1)");
-    	if (pos != std::string::npos)
-    	{
-        	an1 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("AN(2)");
-    	if (pos != std::string::npos)
-    	{
-        	an2 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("BN(1)");
-    	if (pos != std::string::npos)
-    	{
-        	bn1 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("BN(2)");
-    	if (pos != std::string::npos)
-    	{
-        	bn2 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("CFL");
-    	if (pos != std::string::npos)
-    	{
-        	cfl = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("CFL1");
-    	if (pos != std::string::npos)
-    	{
-        	cfl1 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("TIMEW");
-    	if (pos != std::string::npos)
-    	{
-        	step0 = atof(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("bufferX");
-    	if (pos != std::string::npos)
-    	{
-        	bufferSizeX = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("bufferY");
-    	if (pos != std::string::npos)
-    	{
-        	bufferSizeY = atoi(it.first.c_str());
-        	break;
-    	}
-	}
-	for(auto it : keys)
-	{
-		size_t pos = it.second.find("bufferZ");
-    	if (pos != std::string::npos)
-    	{
-        	bufferSizeZ = atoi(it.first.c_str());
-        	break;
-    	}
-	}
 
     if (nSequence == 4 || nSequence == 9 || nSequence == 99 || nSequence == 98)
     {
@@ -987,6 +629,16 @@ void NmrRelaxationSolve::ReadConcentration()
 				cout << "Caught exception number:  " << a << " No file n1_init.dat" << endl;
 			}
 			getline(f1, field_comment);
+			ifstream f2("data/n2_init.dat");
+			try
+			{
+				if (!f2) throw 1;
+			}
+			catch (int a)
+			{
+				cout << "Caught exception number:  " << a << " No file n2_init.dat" << endl;
+			}
+			getline(f2, field_comment);
 			for (int i = 1; i < (gs.ik + 1); i++)
 			{
 				for (int j = 1; j < (gs.jk + 1); j++)
@@ -998,14 +650,16 @@ void NmrRelaxationSolve::ReadConcentration()
 						{
 							concentration[0][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
 						}
+						f2 >> buf;
 						if (int((k - 1) / gs.kk) == MPI_rank)
 						{
-							concentration[1][index(i, j, ((k-1) % gs.kk + 1), gs)] = (1.0 - buf);
+							concentration[1][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
 						}
 					}
 				}
 			}
 			f1.close();
+			f2.close();
 		}
 	}
 }

@@ -10,9 +10,6 @@
 //#include <conio.h>
 #include <ctime>
 #include <omp.h>
-#include <vector>
-#include <algorithm>
-#include <iterator>
 //#include <direct.h>
 #include <mpi.h>
 using namespace std;
