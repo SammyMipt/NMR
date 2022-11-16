@@ -68,7 +68,8 @@ void NmrRelaxationSolve::solve()
 void NmrRelaxationSolve::ReadGridSize()
 {
 	std::string field_comment;
-	ifstream f("data/Nmr_start.dat");
+//	ifstream f("data/Nmr_start.dat");
+    ifstream f("data/Model.dat");
 	try
 	{
 		if (!f) throw 1;
@@ -78,11 +79,15 @@ void NmrRelaxationSolve::ReadGridSize()
 		cout << "Caught exception number:  " << a << " No file Nmr_start.dat" << endl;
 	}
 
-	f >> gs.ik;
-	getline(f, field_comment);
-	f >> gs.jk;
-	getline(f, field_comment);
+//	f >> gs.ik;
+//	getline(f, field_comment);
+//	f >> gs.jk;
+//	getline(f, field_comment);
+//	f >> gs.kk;
+//	getline(f, field_comment);
 	f >> gs.kk;
+    f >> gs.jk;
+    f >> gs.ik;
 	getline(f, field_comment);
 	gs.kk = gs.kk / MPI_size;
 	cout << gs.ik << endl;
@@ -489,9 +494,10 @@ void NmrRelaxationSolve::ReadActiveCells()
 	
 	if (nPoro == 1)
 	{
-		char buf;
+        float buf;
 		std::string field_comment;
-		ifstream f("data/Poro.dat");
+//		ifstream f("data/Poro.dat");
+        ifstream f("data/Model.dat");
 		try
 		{
 			if (!f) throw 1;
@@ -510,7 +516,14 @@ void NmrRelaxationSolve::ReadActiveCells()
 					f >> buf;
 					if (int((k-1)/ gs.kk) == MPI_rank)
 					{
-						actCell[index(i, j, ((k-1) % gs.kk+1), gs)]=buf;
+                        if (buf < 0)
+                        {
+                            actCell[index(i, j, ((k-1) % gs.kk+1), gs)]='0';
+                        }
+                        else
+                        {
+                            actCell[index(i, j, ((k-1) % gs.kk+1), gs)]='1';
+                        }
 					}
 				}
 			}
@@ -619,47 +632,59 @@ void NmrRelaxationSolve::ReadConcentration()
 			float buf;
 			//printf("Read the poro file plz\n");
 			std::string field_comment;
-			ifstream f1("data/n1_init.dat");
-			try
-			{
-				if (!f1) throw 1;
-			}
-			catch (int a)
-			{
-				cout << "Caught exception number:  " << a << " No file n1_init.dat" << endl;
-			}
-			getline(f1, field_comment);
-			ifstream f2("data/n2_init.dat");
-			try
-			{
-				if (!f2) throw 1;
-			}
-			catch (int a)
-			{
-				cout << "Caught exception number:  " << a << " No file n2_init.dat" << endl;
-			}
-			getline(f2, field_comment);
+            ifstream f("data/Model.dat");
+            try
+            {
+                if (!f) throw 1;
+            }
+            catch (int a)
+            {
+                cout << "Caught exception number:  " << a << " No file Model.dat" << endl;
+            }
+//			ifstream f1("data/n1_init.dat");
+//			try
+//			{
+//				if (!f1) throw 1;
+//			}
+//			catch (int a)
+//			{
+//				cout << "Caught exception number:  " << a << " No file n1_init.dat" << endl;
+//			}
+//			getline(f1, field_comment);
+//			ifstream f2("data/n2_init.dat");
+//			try
+//			{
+//				if (!f2) throw 1;
+//			}
+//			catch (int a)
+//			{
+//				cout << "Caught exception number:  " << a << " No file n2_init.dat" << endl;
+//			}
+//			getline(f2, field_comment);
 			for (int i = 1; i < (gs.ik + 1); i++)
 			{
 				for (int j = 1; j < (gs.jk + 1); j++)
 				{
 					for (int k = 1; k < (gs.kk*MPI_size + 1); k++)
 					{
-						f1 >> buf;
+						f >> buf;
 						if (int((k - 1) / gs.kk) == MPI_rank)
 						{
-							concentration[0][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
+                            if(buf >= 0)
+                            {
+                                concentration[0][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
+                                concentration[1][index(i, j, ((k-1) % gs.kk + 1), gs)] = 1.0 - buf;
+                            }
 						}
-						f2 >> buf;
-						if (int((k - 1) / gs.kk) == MPI_rank)
-						{
-							concentration[1][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
-						}
+//						f2 >> buf;
+//						if (int((k - 1) / gs.kk) == MPI_rank)
+//						{
+//							concentration[1][index(i, j, ((k-1) % gs.kk + 1), gs)] = buf;
+//						}
 					}
 				}
 			}
-			f1.close();
-			f2.close();
+			f.close();
 		}
 	}
 }
