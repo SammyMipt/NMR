@@ -1,21 +1,28 @@
-ARG IMAGE_NAME
-FROM ${IMAGE_NAME}:11.8.0-runtime-ubuntu22.04 as base
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 as builder
 
-FROM base as base-amd64
+SHELL ["/bin/bash", "-cu"]
+RUN apt-get -y update && \
+    apt-get -y clean all && \
+    apt-get -y install build-essential libssl-dev && \
+    apt-get -y install openmpi-bin openmpi-common libopenmpi-dev && \
+    apt-get -y install wget && \
 
-ENV NV_CUDNN_VERSION 8.6.0.163
-ENV NV_CUDNN_PACKAGE_NAME "libcudnn8"
 
-ENV NV_CUDNN_PACKAGE "libcudnn8=$NV_CUDNN_VERSION-1+cuda11.8"
+RUN mkdir downloads && \
+    cd downloads/ && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2.tar.gz &&\
+    tar zxvf cmake-3.24.2.tar.gz && \
+    cd cmake-3.24.2/ && \
+    ./bootstrap && \
+    make && \
+    make install \
+    cd ../../
 
-FROM base-${TARGETARCH}
+RUN mkdir -p /apps
 
-ARG TARGETARCH
+COPY src build/src
+COPY heades build/headers
+COPY CMakeLists.txt build/
 
-LABEL maintainer "NVIDIA CORPORATION <cudatools@nvidia.com>"
-LABEL com.nvidia.cudnn.version="${NV_CUDNN_VERSION}"
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ${NV_CUDNN_PACKAGE} \
-    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /build
+RUN cmake NMR_exe

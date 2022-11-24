@@ -428,8 +428,11 @@ void NmrRelaxationSolve::ReadStart()
     }
 
 	double b_total = sqrt(bsx*bsx + bsy*bsy + bsz*bsz);
-	if (nSequence == 0) endTime = 2 * t2Water;
-	if (nSequence == 1) endTime = 2 * t2Water;
+	if (nSequence == 0)
+    {
+        endTime = 5 * t2Water;
+    };
+	if (nSequence == 1) endTime = 5 * t2Water;
 	if (nSequence == 2) endTime = 4.0*sequenceTime1 + sequenceTime2;
 	if (nSequence == 5) endTime = sequenceTime2 + 2.0*sequenceTime1;
 	if (nSequence == 9 || nSequence == 99 || nSequence == 98) endTime = sequenceTime2 + 2.0*sequenceTime1;
@@ -660,7 +663,7 @@ void NmrRelaxationSolve::ReadConcentration()
 //			{
 //				cout << "Caught exception number:  " << a << " No file n2_init.dat" << endl;
 //			}
-//			getline(f2, field_comment);
+			getline(f, field_comment);
 			for (int i = 1; i < (gs.ik + 1); i++)
 			{
 				for (int j = 1; j < (gs.jk + 1); j++)
@@ -2209,6 +2212,10 @@ void NmrRelaxationSolve::StepTime()
 	//dTime = 1.0e-6;
 	cout << "dTime=" << scientific << dTime << " rank=" << MPI_rank << endl;
 	nStep = int(endTime / dTime)+1;
+    if(nSequence == 0 && nStep > ndPrint)
+    {
+        ndPrint = int(nStep / ndPrint);
+    };
 	//nStep = 5;
 	cout << "nStep=" << nStep << " rank=" << MPI_rank << endl;	
 }
@@ -2982,7 +2989,7 @@ double NmrRelaxationSolve::max(double a, double b)
 
 void NmrRelaxationSolve::OutputX(VectorField* field)
 {
-	double sum = 0.0,z1,z2,c1,c2, sum_1=0.0, sum_2=0.0;
+	double sum = 0.0,z1,z2,c1,c2, sum_1=0.0, sum_2=0.0, m = 0.0;
 	int test = 0;
 	if (nComponents == 1)
 	{
@@ -3013,16 +3020,19 @@ void NmrRelaxationSolve::OutputX(VectorField* field)
 				{
 					if (actCell[index(i, j, k, gs)] == '1')
 					{
-						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
-						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
-						c1 = z2 / (z1 + z2);
-						c2 = z1 / (z1 + z2);
-						if (c1>0.8 || c2>0.8)
-						{
-							sum_1 += field->x[index(i, j, k, gs)] * c1;
-							sum_2 += field->x[index(i, j, k, gs)] * c2;
-							test += 1;
-						}
+//						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
+//						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
+//						c1 = z2 / (z1 + z2);
+//						c2 = z1 / (z1 + z2);
+                        c1 = concentration[0][index(i, j, k, gs)];
+						c2 = concentration[1][index(i, j, k, gs)];
+                        m = field->x[index(i, j, k, gs)];
+                        if (c1>0.8 || c2>0.8)
+                        {
+                            sum_1 += m * c1;
+                            sum_2 += m * c2;
+                            test += 1;
+                        }
 					}
 				}
 			}
@@ -3036,7 +3046,7 @@ void NmrRelaxationSolve::OutputX(VectorField* field)
 
 void NmrRelaxationSolve::OutputY(VectorField* field)
 {
-	double sum = 0.0, z1, z2, c1, c2, sum_1 = 0.0, sum_2 = 0.0;
+	double sum = 0.0, z1, z2, c1, c2, sum_1 = 0.0, sum_2 = 0.0, m=0.0;
 	int test = 0;
 	if (nComponents == 1)
 	{
@@ -3067,14 +3077,17 @@ void NmrRelaxationSolve::OutputY(VectorField* field)
 				{
 					if (actCell[index(i, j, k, gs)] == '1')
 					{
-						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
-						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
-						c1 = z2 / (z1 + z2);
-						c2 = z1 / (z1 + z2);
+//						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
+//						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
+//						c1 = z2 / (z1 + z2);
+//						c2 = z1 / (z1 + z2);
+                        c1 = concentration[0][index(i, j, k, gs)];
+                        c2 = concentration[1][index(i, j, k, gs)];
+                        m = field->y[index(i, j, k, gs)];
 						if (c1>0.8 || c2>0.8)
 						{
-							sum_1 += field->y[index(i, j, k, gs)] * c1;
-							sum_2 += field->y[index(i, j, k, gs)] * c2;
+							sum_1 += m * c1;
+							sum_2 += m * c2;
 							test += 1;
 						}
 					}
@@ -3090,7 +3103,7 @@ void NmrRelaxationSolve::OutputY(VectorField* field)
 
 void NmrRelaxationSolve::OutputZ(VectorField* field)
 {
-	double sum = 0.0, z1, z2, c1, c2, sum_1 = 0.0, sum_2 = 0.0;
+	double sum = 0.0, z1, z2, c1, c2, sum_1 = 0.0, sum_2 = 0.0, m = 0.0;
 	int test = 0;
 	if (nComponents == 1)
 	{
@@ -3121,16 +3134,19 @@ void NmrRelaxationSolve::OutputZ(VectorField* field)
 				{
 					if (actCell[index(i, j, k, gs)] == '1')
 					{
-						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
-						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
-						c1 = z2 / (z1 + z2);
-						c2 = z1 / (z1 + z2);
-						if (c1>0.8 || c2>0.8)
-						{
-							sum_1 += field->z[index(i, j, k, gs)] * c1;
-							sum_2 += field->z[index(i, j, k, gs)] * c2;
-							test += 1;
-						}
+//						z1 = sqrt((concentration[0][index(i, j, k, gs)] - an1) * (concentration[0][index(i, j, k, gs)] - an1) + (concentration[1][index(i, j, k, gs)] - an2) * (concentration[1][index(i, j, k, gs)] - an2));
+//						z2 = sqrt((concentration[0][index(i, j, k, gs)] - bn1) * (concentration[0][index(i, j, k, gs)] - bn1) + (concentration[1][index(i, j, k, gs)] - bn2) * (concentration[1][index(i, j, k, gs)] - bn2));
+//						c1 = z2 / (z1 + z2);
+//						c2 = z1 / (z1 + z2);
+                        c1 = concentration[0][index(i, j, k, gs)];
+                        c2 = concentration[1][index(i, j, k, gs)];
+                        m = field->z[index(i, j, k, gs)];
+                        if (c1>0.8 || c2>0.8)
+                        {
+                            sum_1 += m * c1;
+                            sum_2 += m * c2;
+                            test += 1;
+                        }
 					}
 				}
 			}
