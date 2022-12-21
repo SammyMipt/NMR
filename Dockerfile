@@ -1,28 +1,31 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 as builder
+FROM nvidia/cuda:11.1.1-devel-ubuntu20.04 as builder
 
 SHELL ["/bin/bash", "-cu"]
-RUN apt-get -y update && \
-    apt-get -y clean all && \
-    apt-get -y install build-essential libssl-dev && \
-    apt-get -y install openmpi-bin openmpi-common libopenmpi-dev && \
-    apt-get -y install wget && \
+RUN apt-get -y update
+RUN apt-get -y clean all
+RUN apt-get -y install build-essential libssl-dev
+RUN apt-get -y install bash-completion
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install openmpi-bin openmpi-common libopenmpi-dev
+RUN apt-get -y install wget
+RUN apt-get -y clean all
 
-
-RUN mkdir downloads && \
-    cd downloads/ && \
-    wget https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2.tar.gz &&\
-    tar zxvf cmake-3.24.2.tar.gz && \
-    cd cmake-3.24.2/ && \
-    ./bootstrap && \
-    make && \
-    make install \
-    cd ../../
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.25.1/cmake-3.25.1-linux-x86_64.sh -q -O /tmp/cmake-install.sh
+RUN chmod u+x /tmp/cmake-install.sh
+RUN /tmp/cmake-install.sh --skip-license --prefix=/usr/local
+RUN rm /tmp/cmake-install.sh
 
 RUN mkdir -p /apps
 
-COPY src build/src
-COPY heades build/headers
-COPY CMakeLists.txt build/
+RUN mkdir /build
 
-WORKDIR /build
-RUN cmake NMR_exe
+COPY src build/src
+COPY headers build/headers
+COPY CMakeLists.txt build/CMakeLists.txt
+COPY data build/data
+WORKDIR /build/build
+RUN cmake .. && make
+
+
+
+#RUN cmake NMR_exe
+## --gpus=all

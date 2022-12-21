@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.24)
 #set(CMAKE_CUDA_RUNTIME_LIBRARY "/usr/local/cuda-11.8/targets/x86_64-linux/lib")
 project(NMR LANGUAGES CXX CUDA)
 
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES 70)
+endif()
+
 set(SOURCES src/main.cpp src/NmrRelaxationSolve.cpp src/NmrRelaxationSolveKernels.cu)
 
 find_package(MPI REQUIRED)
@@ -12,7 +16,8 @@ enable_language(CUDA)
 
 
 add_executable(NMR_exe ${SOURCES})
+set_property(TARGET NMR_exe PROPERTY CUDA_ARCHITECTURES off)
 target_link_libraries(NMR_exe MPI::MPI_CXX)
 target_link_libraries(NMR_exe CUDA::cudart)
 set_target_properties(NMR_exe PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-set_target_properties(NMR_exe PROPERTIES CUDA_ARCHITECTURES native)
+#set_target_properties(NMR_exe PROPERTIES CUDA_ARCHITECTURES native)
